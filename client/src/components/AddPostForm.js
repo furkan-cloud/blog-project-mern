@@ -13,9 +13,9 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
-import { useForm, Controller } from "ract-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,8 +35,8 @@ const postSchema = yup.object().shape({
   tag: yup.mixed().oneOf(tags),
 });
 
-export const AddPostForm = ({ open, handleClose }) => {
-  const { register, handleSubmit, control, errors, reset } = useForms({
+const AddPostForm = ({ open, handleClose }) => {
+  const { register, handleSubmit, control, errors, reset } = useForm({
     resolver: yupResolver(postSchema),
   });
 
@@ -49,10 +49,10 @@ export const AddPostForm = ({ open, handleClose }) => {
           Fill the form for adding new article
         </DialogContentText>
         <div className={classes.root}>
-          <form noValidate autoComplete="off" onSubmit={}>
+          <form noValidate autoComplete="off">
             <TextField
               id="title"
-              label="Başlık"
+              label="Title"
               name="title"
               variant="outlined"
               className={classes.textField}
@@ -63,7 +63,7 @@ export const AddPostForm = ({ open, handleClose }) => {
             />
             <TextField
               id="subtitle"
-              label="Alt Başlık"
+              label="Subtitle"
               name="title"
               variant="outlined"
               className={classes.textField}
@@ -72,9 +72,49 @@ export const AddPostForm = ({ open, handleClose }) => {
               error={errors.subtitle ? true : false}
               fullWidth
             />
+            <Controller
+              as={
+                <Select
+                  input={<Input />}
+                  className={classes.textField}
+                  fullWidth
+                >
+                  {tags.map((tag, index) => (
+                    <MenuItem key={index} value={tag}>
+                      {tag}
+                    </MenuItem>
+                  ))}
+                </Select>
+              }
+              name="tag"
+              control={control}
+              error={errors.tag ? true : false}
+              defaultValue={tags[0]}
+            />
+            <TextField
+              id="content"
+              label="Content"
+              name="content"
+              multiline
+              rows={4}
+              variant="outlined"
+              className={classes.textField}
+              size="small"
+              inputRef={register}
+              error={errors.content ? true : false}
+              fullWidth
+            />
           </form>
         </div>
       </DialogContent>
+      <DialogActions>
+        <Button color="inherit">Cancel</Button>
+        <Button type="submit" variant="outlined" color="primary">
+          Add
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
+
+export default AddPostForm;
