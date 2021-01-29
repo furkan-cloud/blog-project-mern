@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   CssBaseline,
@@ -13,6 +13,7 @@ import {
 import { BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
 import PenIcon from "@material-ui/icons/Create";
 import PostsList from "./components/PostsList";
+import AddPostForm from "./components/AddPostForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +31,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const App = () => {
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
   return (
     <>
       <CssBaseline />
@@ -66,6 +77,7 @@ const App = () => {
           </Grid>
         </Grid>
       </Container>
+      <AddPostForm open={open} handleClose={handleClose}/>
     </>
   );
 };
