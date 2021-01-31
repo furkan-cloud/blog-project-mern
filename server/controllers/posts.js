@@ -16,6 +16,7 @@ export const createPost = async (req, res) => {
   const newPost = new Post(post);
   try {
     await newPost.save();
+    res.status(201).json(newPost); // post eklendiğinde hemen sayfada görünmesi için, aksi halde sayfayı refresh yapmak gerekeiyor
   } catch (error) {
     res.status(409).json({
       message: error.message,
