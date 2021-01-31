@@ -1,21 +1,23 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Button,
-  Text,
-  TextField,
-  Select,
-  Input,
-  MenuItem,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Input,
+  makeStyles,
+  MenuItem,
+  Select,
+  TextField,
 } from "@material-ui/core";
-import { useForm, Controller } from "react-hook-form";
+import React, { useState } from "react";
+import FileBase64 from "react-file-base64";
+import { Controller, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { createPost } from "../actions/post";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,9 +38,23 @@ const postSchema = yup.object().shape({
 });
 
 const AddPostForm = ({ open, handleClose }) => {
+  const dispatch = useDispatch();
+  const [file, setFile] = useState(null);
+
   const { register, handleSubmit, control, errors, reset } = useForm({
     resolver: yupResolver(postSchema),
   });
+
+  const onSubmit = (data) => {
+    dispatch(createPost({ ...data, image: file }));
+    clearForm();
+  };
+
+  const clearForm = () => {
+    reset();
+    setFile(null);
+    handleClose();
+  };
 
   const classes = useStyles();
   return (
@@ -49,7 +65,7 @@ const AddPostForm = ({ open, handleClose }) => {
           Fill the form for adding new article
         </DialogContentText>
         <div className={classes.root}>
-          <form noValidate autoComplete="off">
+          <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
             <TextField
               id="title"
               label="Title"
@@ -64,7 +80,7 @@ const AddPostForm = ({ open, handleClose }) => {
             <TextField
               id="subtitle"
               label="Subtitle"
-              name="title"
+              name="subtitle"
               variant="outlined"
               className={classes.textField}
               size="small"
@@ -104,12 +120,23 @@ const AddPostForm = ({ open, handleClose }) => {
               error={errors.content ? true : false}
               fullWidth
             />
+            <FileBase64
+              multiple={false}
+              onDone={({ base64 }) => setFile(base64)}
+            />
           </form>
         </div>
       </DialogContent>
       <DialogActions>
-        <Button color="inherit">Cancel</Button>
-        <Button type="submit" variant="outlined" color="primary">
+        <Button color="inherit" onClick={clearForm}>
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant="outlined"
+          color="primary"
+          onClick={() => handleSubmit(onSubmit)()}
+        >
           Add
         </Button>
       </DialogActions>
