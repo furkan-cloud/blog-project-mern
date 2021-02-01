@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import {
@@ -11,11 +11,17 @@ import {
   Button,
   IconButton,
 } from "@material-ui/core";
-import { BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import PenIcon from "@material-ui/icons/Create";
 import PostsList from "./components/PostsList";
 import AddPostForm from "./components/AddPostForm";
-import {fetchPosts} from "./actions/post";
+import { fetchPosts } from "./actions/post";
+import PostDetails from "./components/PostDetails";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,15 +45,15 @@ const App = () => {
 
   useEffect(() => {
     dispatch(fetchPosts());
-  }, [dispatch])
+  }, [dispatch]);
 
   const handleOpen = () => {
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
   const handleClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   return (
     <>
@@ -61,13 +67,18 @@ const App = () => {
               color="inherit"
             />
             <Typography
-            variant="h6"
-            color="secondary"
-            className={classes.title}
+              variant="h6"
+              color="secondary"
+              className={classes.title}
             >
               <a href="http://localhost:3000/posts">My Blog</a>
             </Typography>
-            <Button color="primary" variant="outlined" startIcon={<PenIcon/>} onClick={handleOpen} >
+            <Button
+              color="primary"
+              variant="outlined"
+              startIcon={<PenIcon />}
+              onClick={handleOpen}
+            >
               New Article
             </Button>
           </Toolbar>
@@ -77,14 +88,14 @@ const App = () => {
             <Router>
               <Switch>
                 <Route exact path="/posts" component={PostsList} />
-                <Route exact path="/posts" component={PostsList} />
+                <Route exact path="/posts/:id" component={PostDetails} />
               </Switch>
-              <Redirect from="/" to="/posts"/>
+              <Redirect from="/" to="/posts" />
             </Router>
           </Grid>
         </Grid>
       </Container>
-      <AddPostForm open={open} handleClose={handleClose}/>
+      <AddPostForm open={open} handleClose={handleClose} />
     </>
   );
 };

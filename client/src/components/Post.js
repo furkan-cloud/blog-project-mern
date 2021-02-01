@@ -9,10 +9,10 @@ import {
   CardContent,
   CardActions,
   Typography,
-  Link,
 } from "@material-ui/core";
 
 import noImage from "../images/noimage.svg";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
