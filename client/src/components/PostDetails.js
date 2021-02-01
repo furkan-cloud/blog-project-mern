@@ -47,6 +47,11 @@ const PostDetails = ({ match, history, location }) => {
     return moment(date).fromNow();
   };
 
+  const removePost = () => {
+    dispatch(deletePost(currentPost._id));
+    history.push("/posts");
+  };
+
   return (
     <Paper className={classes.paper} elevation={0}>
       <div>
@@ -61,14 +66,15 @@ const PostDetails = ({ match, history, location }) => {
               variant="outlined"
               startIcon={<EditIcon />}
             >
-              Düzenle
+              Edit
             </Button>
             <Button
               color="secondary"
               variant="outlined"
               startIcon={<DeleteIcon />}
+              onClick={removePost}
             >
-              Sil
+              Delete
             </Button>
           </div>
         </div>
