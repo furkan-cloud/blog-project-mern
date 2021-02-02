@@ -10,3 +10,6 @@ export const createPost = async (post) => await axios.post(apiEndpoint, post);
 
 export const deletePost = async (id) =>
   await axios.delete(`${apiEndpoint}${id}`);
+
+export const updatePost = async (id, updatedPost) =>
+  await axios.patch(`${apiEndpoint}${id}`, updatedPost);
